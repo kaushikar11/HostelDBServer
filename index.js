@@ -2,17 +2,22 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const studentRoutes = require('./routes/studentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const leavingFormRoutes = require('./routes/LeavingFormRoutes');
 // const complaintRoutes = require('./routes/complaintRoutes');
 
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+
 const app = express();
 const PORT = 3031;
 
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: CLIENT_URL, // Only allow this origin
+    optionsSuccessStatus: 200, // Response for successful OPTIONS requests
+};
+app.use(cors(corsOptions));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
