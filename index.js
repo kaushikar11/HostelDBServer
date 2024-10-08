@@ -14,7 +14,7 @@ const PORT = 3031;
 
 app.use(express.json());
 const corsOptions = {
-    origin: CLIENT_URL, // Only allow this origin
+    origin: '*', // Only allow this origin
     optionsSuccessStatus: 200, // Response for successful OPTIONS requests
 };
 app.use(cors(corsOptions));
