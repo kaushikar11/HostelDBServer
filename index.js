@@ -12,8 +12,30 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 const app = express();
 const PORT = 3031;
 
+app.use(express.json());
 
-app.use(cors());
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Replace * with 'http://localhost:3000' to limit the origin
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Max-Age", "1800");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
+
+    // Handle OPTIONS method (preflight request)
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200); // Respond with status 200 for OPTIONS preflight
+    }
+
+    next(); // Proceed to the next middleware/route
+});
+
+
+const corsOptions = {
+    origin: CLIENT_URL, // Only allow this origin
+    optionsSuccessStatus: 200, // Response for successful OPTIONS requests
+};
+app.use(cors(corsOptions));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
