@@ -15,13 +15,25 @@ app.use(express.json());
 
 // CORS options
 const corsOptions = {
-    origin: CLIENT_URL, // Only allow the specified origin
+    origin: '*', // Allow any origin (Use '*' to allow all origins)
     credentials: true,  // Allow cookies and credentials
     optionsSuccessStatus: 200, // Response for successful OPTIONS requests
 };
 
-// Use CORS middleware
 app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); // Allow any origin
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+        return res.status(200).json({});
+    }
+    next();
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
