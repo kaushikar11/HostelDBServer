@@ -15,21 +15,29 @@ const PORT = 3031;
 app.use(express.json());
 
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // Replace * with 'http://localhost:3000' to limit the origin
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Max-Age", "1800");
-    res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
-
-    // Handle OPTIONS method (preflight request)
+const allowCors = fn => async (req, res) => {
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    // another common pattern
+    // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    )
     if (req.method === 'OPTIONS') {
-        return res.sendStatus(200); // Respond with status 200 for OPTIONS preflight
+      res.status(200).end()
+      return
     }
-
-    next(); // Proceed to the next middleware/route
-});
-
+    return await fn(req, res)
+  }
+  
+  const handler = (req, res) => {
+    const d = new Date()
+    res.end(d.toString())
+  }
+  
+  module.exports = allowCors(handler)
 
 const corsOptions = {
     origin: CLIENT_URL, // Only allow this origin
