@@ -2,6 +2,10 @@
 
 Express.js backend server for the Hostel Database Management System.
 
+## Project Overview
+
+A comprehensive full-stack application for managing a university hostel database with a professional admin dashboard interface. This is the backend (server) portion of the application.
+
 ## Overview
 
 RESTful API server built with Node.js and Express.js. Handles student management, image storage (MongoDB GridFS), complaints, and leaving forms.
@@ -25,54 +29,102 @@ RESTful API server built with Node.js and Express.js. Handles student management
 - **CORS**: Cross-origin resource sharing
 - **dotenv**: Environment variable management
 
+## Full Project Structure
+
+```
+HostelDB/
+├── client/                 # React frontend application
+│   ├── public/            # Static files
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── *.js          # Main components
+│   │   └── *.css         # Stylesheets
+│   └── package.json
+├── server/                # Node.js backend (this directory)
+│   ├── models/           # Mongoose models
+│   ├── routes/           # API routes
+│   ├── util/             # Utility functions
+│   ├── app.js            # Main server file
+│   └── package.json
+└── README.md             # Project documentation
+```
+
 ## Prerequisites
 
 - Node.js (v14 or higher)
 - npm or yarn
 - MongoDB (local or MongoDB Atlas)
 
-## Installation
+## Getting Started
 
-1. **Navigate to server directory**
-   ```bash
-   cd server
-   ```
+### 1. Clone the Repository
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+git clone <repository-url>
+cd HostelDB
+```
 
-3. **Configure environment variables**
-   
-   Create a `.env` file in the `server` directory:
-   ```env
-   PORT=3001
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/hostelDB?retryWrites=true&w=majority
-   CLIENT_URL=http://localhost:3000
-   ```
-   
-   **For MongoDB Atlas:**
-   1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   2. Create a cluster (free tier available)
-   3. Create database user with username and password
-   4. Whitelist IP address (use `0.0.0.0/0` for development)
-   5. Get connection string and replace credentials
-   6. URL-encode special characters in password if needed
+### 2. Install Dependencies
 
-## Running the Server
+```bash
+cd server
+npm install
+```
 
-### Development Mode (with auto-reload)
+### 3. Configure Environment Variables
+
+Create a `.env` file in the `server` directory (you can copy `.env.example` as a template):
+
+```env
+# Server Port
+PORT=3001
+
+# MongoDB Connection String
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/hostelDB?retryWrites=true&w=majority
+
+# Client URL for CORS configuration
+CLIENT_URL=http://localhost:3000
+```
+
+**For MongoDB Atlas:**
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a cluster (free tier available)
+3. Create database user with username and password
+4. Whitelist IP address (use `0.0.0.0/0` for development)
+5. Get connection string and replace credentials
+6. URL-encode special characters in password if needed
+
+**For local MongoDB:**
+```env
+MONGODB_URI=mongodb://localhost:27017/hostelDB
+```
+
+### 4. Running the Server
+
+#### Development Mode (with auto-reload)
 ```bash
 npm run dev
 ```
 
-### Production Mode
+#### Production Mode
 ```bash
 npm start
 ```
 
 The server will run on `http://localhost:3001` (or PORT from .env)
+
+### 5. Start the Frontend Client
+
+After the server is running, start the client application. See `../client/README.md` for detailed setup instructions.
+
+```bash
+cd ../client
+npm install
+# Create .env file with Firebase config and server URL
+npm start
+```
+
+The client will run on `http://localhost:3000`
 
 ## Project Structure
 
@@ -253,7 +305,10 @@ The server includes comprehensive error handling:
 2. Create new Web Service
 3. Set build command: `cd server && npm install`
 4. Set start command: `cd server && npm start`
-5. Add environment variables
+5. Add environment variables:
+   - `PORT`: 3001 (or your preferred port)
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `CLIENT_URL`: Your Vercel client URL
 6. Deploy
 
 ### Railway
@@ -277,6 +332,7 @@ The server includes comprehensive error handling:
 - Verify IP is whitelisted in MongoDB Atlas
 - Check username/password are correct
 - URL-encode special characters in password
+- Ensure MongoDB Atlas cluster is running
 
 ### Port Already in Use
 - Change `PORT` in `.env`
@@ -285,29 +341,71 @@ The server includes comprehensive error handling:
 ### CORS Errors
 - Verify `CLIENT_URL` is set correctly
 - Check allowed origins in `app.js`
-- Ensure client URL matches exactly
+- Ensure client URL matches exactly (including protocol and port)
+- Check server logs for CORS error details
 
 ### Image Upload Issues
 - Verify GridFS is working
 - Check file size limits
 - Ensure multer is configured correctly
 - Check MongoDB connection
+- Verify file permissions
 
-## Development Tips
+### API Calls Failing
+- Check server is running
+- Verify CORS configuration
+- Check MongoDB connection
+- Review server logs for errors
+
+## Development
+
+### Adding New Features
+
+1. **Backend Routes**: Add routes in `routes/`
+2. **Database Models**: Add models in `models/`
+3. **API**: Follow RESTful conventions
+4. **Error Handling**: Use consistent error response format
+
+### Code Style
+
+- Use consistent naming conventions
+- Add comments for complex logic
+- Keep routes modular and organized
+- Follow Express.js best practices
+- Use async/await for asynchronous operations
+
+### Development Tips
 
 1. **Use nodemon**: Automatically restarts server on file changes
 2. **Check logs**: Server logs show connection status and errors
 3. **Test endpoints**: Use Postman or curl to test API
 4. **MongoDB Compass**: Use for database inspection
+5. **Environment Variables**: Restart server after changing `.env` variables
 
 ## Security Notes
 
 1. **Never commit `.env` file** to version control
 2. **Use strong MongoDB passwords**
-3. **Restrict network access** in production
+3. **Restrict network access** in production (MongoDB Atlas)
 4. **Validate all inputs** before database operations
 5. **Use HTTPS** in production
+6. **CORS**: Only allow trusted origins in production
+7. **MongoDB Password**: URL-encode special characters in connection string
 
 ## License
 
 [Your License Here]
+
+## Support
+
+For issues or questions:
+1. Check the troubleshooting section above
+2. Review server logs for detailed error messages
+3. Check MongoDB Atlas console for database issues
+4. See `../client/README.md` for frontend-related issues
+
+## Acknowledgments
+
+- Design inspired by professional university admin dashboards
+- Built with modern web technologies
+- MongoDB GridFS for efficient image storage
