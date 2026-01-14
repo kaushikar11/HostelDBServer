@@ -1,7 +1,7 @@
 {
   "name": "hostel-db-server",
   "version": "1.0.0",
-  "description": "Backend server for Ladies Hostel Database System",
+  "description": "Backend server for Hostel Database System",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

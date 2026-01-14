@@ -14,11 +14,23 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
+// CORS configuration - allow client URL from environment variable
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'https://hostel-db-client.vercel.app',
+  'http://localhost:3000' // Keep for local development
+];
+
 app.use(cors({
-  origin: [
-    'https://tceladieshostel-v1.vercel.app',
-    'http://localhost:3000' // Keep for local development
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
